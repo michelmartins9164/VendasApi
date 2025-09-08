@@ -13,6 +13,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.Services.AddScoped<UserRepository>();
 builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<ClientRepository>();
+builder.Services.AddScoped<ClientService>();
 
 builder.Services.AddControllers();
 
