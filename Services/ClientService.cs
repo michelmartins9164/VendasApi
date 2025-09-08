@@ -24,9 +24,20 @@ namespace API.Services
             return await _repository.GetByIdAsync(id);
         }
 
-        public async Task<Client?> CreateClientAsync(Client dto)
+        public async Task<Client?> CreateClientAsync(CreateClientDTO dto)
         {
-            return await _repository.CreateClientAsync(dto);
+            var newClient = new Client
+            {
+                Empresa = dto.Empresa,
+                NomeCompleto = dto.NomeCompleto,
+                Ativo = dto.Ativo,
+                EnderecoEntrega = dto.EnderecoEntrega,
+                Cidade = dto.Cidade,
+                Telefone = dto.Telefone,
+                Observacao = dto.Observacao
+            };
+
+            return await _repository.CreateClientAsync(newClient);
         }
 
         public async Task<Client?> InactivateClientAsync(int id, bool status)
@@ -38,12 +49,31 @@ namespace API.Services
             return await _repository.UpdateClientAsync(client);
         }
 
-        public async Task<Client?> UpdateClientAsync(int id, Client client)
+        public async Task<Client?> UpdateClientAsync(int id, CreateClientDTO client)
+        {
+            var FindedClient = await _repository.GetByIdAsync(id);
+            if (FindedClient == null) return null;
+            var ClientUpdate = new Client
+            {
+                Id = id,
+                Empresa = client.Empresa,
+                NomeCompleto = client.NomeCompleto,
+                Ativo = client.Ativo,
+                EnderecoEntrega = client.EnderecoEntrega,
+                Cidade = client.Cidade,
+                Telefone = client.Telefone,
+                Observacao = client.Observacao,
+                DataAlteracao = DateTime.Now
+            }; 
+            return await _repository.UpdateClientAsync(ClientUpdate);
+        }
+
+        public async Task<Client?> DeleteClientAsync(int id)
         {
             var FindedClient = await _repository.GetByIdAsync(id);
             if (FindedClient == null) return null;
 
-            return await _repository.UpdateClientAsync(client);
+            return await _repository.DeleteClientAsync(FindedClient);
         }
     }
 }

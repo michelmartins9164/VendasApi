@@ -47,5 +47,15 @@ namespace API.Repositories
             return existingUser;
         }
 
+        public async Task<User?> DeleteUserAsync(User user)
+        {
+            var existingUser = await _context.Users.FindAsync(user.Id);
+            if (existingUser == null) return null;
+
+            _context.Users.Remove(existingUser);
+            await _context.SaveChangesAsync();
+            return existingUser;
+        }
+
     }
 }

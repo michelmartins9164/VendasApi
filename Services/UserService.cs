@@ -86,5 +86,12 @@ namespace API.Services
             return user;
         }
 
+        public async Task<User?> DeleteUserAsync(int id)
+        {
+            var FindedUser = await _repository.GetByIdAsync(id);
+            if (FindedUser == null) return null;
+            return await _repository.DeleteUserAsync(FindedUser);
+        }
+
     }
 }

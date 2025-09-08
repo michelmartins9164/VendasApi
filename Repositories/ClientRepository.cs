@@ -31,8 +31,25 @@ namespace API.Repositories
         }
         public async Task<Client?> UpdateClientAsync(Client client)
         {
+            var existingClient = await _context.Clients.FindAsync(client.Id);
+            if (existingClient == null) return null;
+            existingClient.Empresa = string.IsNullOrEmpty(client.Empresa) ? existingClient.Empresa : client.Empresa;
+            existingClient.NomeCompleto = string.IsNullOrEmpty(client.NomeCompleto) ? existingClient.NomeCompleto : client.NomeCompleto;
+            existingClient.Ativo = client.Ativo;
+            existingClient.EnderecoEntrega = string.IsNullOrEmpty(client.EnderecoEntrega) ? existingClient.EnderecoEntrega : client.EnderecoEntrega;
+            existingClient.Cidade = string.IsNullOrEmpty(client.Cidade) ? existingClient.Cidade : client.Cidade;
+            existingClient.Telefone = string.IsNullOrEmpty(client.Telefone) ? existingClient.Telefone : client.Telefone;
+            existingClient.Observacao = string.IsNullOrEmpty(client.Observacao) ? existingClient.Observacao : client.Observacao;
+            existingClient.DataAlteracao = DateTime.Now;
+
+            await _context.SaveChangesAsync();
+            return existingClient;
+        }
+        public async Task<Client?> DeleteClientAsync(Client client)
+        {
             var existingUser = await _context.Clients.FindAsync(client.Id);
             if (existingUser == null) return null;
+            _context.Clients.Remove(existingUser);
             await _context.SaveChangesAsync();
             return existingUser;
         }
