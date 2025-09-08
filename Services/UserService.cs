@@ -32,6 +32,11 @@ namespace API.Services
                 return null;
             }
 
+            var allUsers = _repository.GetAllAsync().Result;
+            if (allUsers.Any(u => u.Login.Equals(dto.Login)))
+            {
+                return null; // Já existe
+            }
             var user = new User
             {
                 Name = dto.Name,
